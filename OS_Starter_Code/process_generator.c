@@ -8,6 +8,7 @@ int time_quantum;
 //temp for input
 int a,b,c,d;
 struct PCB processToBeSent;
+struct PriorityQueue que;
 //functions
 void clearResources(int);
 void getAlgorithm();
@@ -28,6 +29,13 @@ int main(int argc, char * argv[])
     // 1. Read the input files.
     ReadFile();
     // 2. Ask the user for the chosen scheduling algorithm and its parameters, if there are any.
+
+    while(que.head != NULL)
+    {
+        DeQueue(&que,&processToBeSent);
+        printf("id %d, Arr time %d, Running time %d, Priority %d \n", processToBeSent.id, processToBeSent.ArrTime, processToBeSent.RunTime, processToBeSent.Priority);
+    }
+
     getAlgorithm();   
     // 3. Initiate and create the scheduler and clock processes.
     Start_Clk_Scheduler();
@@ -53,15 +61,44 @@ int main(int argc, char * argv[])
     destroyClk(true);
 }
 
+
 void ReadFile()
 {
-    //array of process
-    a=713;
-    b=3;
-    c=5;
-    d=4;
-    setPCB(&processToBeSent,a,b,c,d);
+    int id;
+    int arrivalTime;
+    int runningTime;
+    int priority;
+    FILE *process = fopen("process.txt", "r");
+    if (process == NULL)
+    {
+        printf("Error! File cannot be opened.");
+        exit(1);
+    }
+    while (1)
+    {
+        char ignoredCharacter[1000];
+        fscanf(process, "%s", ignoredCharacter);
+        {
+            if (*ignoredCharacter == '#')
+            {
+                fgets(ignoredCharacter, sizeof(ignoredCharacter), process);
+                continue;
+            }
+            else
+            {
+                id = atoi(ignoredCharacter);
+                fscanf(process, "%d %d %d", &arrivalTime, &runningTime, &priority);
+                if (feof(process))
+                    break;
+                setPCB(&processToBeSent, id, arrivalTime, runningTime, priority);
+                //printf("id %d, Arr time %d, Running time %d, Priority %d \n", processToBeSent.id, processToBeSent.ArrTime, processToBeSent.RunTime, processToBeSent.Priority);
+                AddAccordingToArrivalTime(&que,processToBeSent);
+            }
+        }
+    }
+    fclose(process);
 }
+
 void IPC()
 {
     int upQId = msgget(1234, 0666 | IPC_CREAT);

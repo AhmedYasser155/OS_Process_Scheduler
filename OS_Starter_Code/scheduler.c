@@ -70,5 +70,69 @@ void STRN()
 }
 void RR()
 {
-    printf("The user chose to run RR\n");   
+    //printf("The user chose to run RR\n");
+
+
+    // for trying the *****************************
+    struct PCB arr[5];
+    setPCB(&arr[0],1,1,5,1);
+    setPCB(&arr[1],2,1,3,1);
+    setPCB(&arr[2],3,1,2,1);
+    setPCB(&arr[3],4,1,6,1);
+    setPCB(&arr[4],5,1,3,1);
+
+    /*struct PCBNode ARR[5];
+    ARR[0] = GenerateNode(arr[0]);
+    ARR[1] = GenerateNode(arr[1]);
+    ARR[2] = GenerateNode(arr[2]);
+    ARR[3] = GenerateNode(arr[3]);
+    ARR[4] = GenerateNode(arr[4]);*/
+
+    struct PriorityQueue que;
+    initializeQueue(&que);
+    /*enQueue(&que,&ARR[0]);
+    enQueue(&que,&ARR[1]);
+    enQueue(&que,&ARR[2]);
+    enQueue(&que,&ARR[3]);
+    enQueue(&que,&ARR[4]);*/
+    Add(&que,arr[0]);
+    Add(&que,arr[1]);
+    Add(&que,arr[2]);
+    Add(&que,arr[3]);
+    Add(&que,arr[4]);
+
+    struct PCB next;
+
+    DeQueue(&que,&next);
+    printf("%d\t",next.id);
+    DeQueue(&que,&next);
+    printf("%d\t",next.id);
+    DeQueue(&que,&next);
+    printf("%d\t",next.id);
+    DeQueue(&que,&next);
+    printf("%d\t",next.id);
+    DeQueue(&que,&next);
+    printf("%d\t",next.id);
+    printf("\n");
+
+    /*next = que.head->pcb;
+    if(next.state == NotStarted)
+    {
+        int process = fork();
+        if(process == -1)
+        {
+            printf("error in forking\n");
+        }
+        else if(process == 0)
+        {
+            char sendid = next.id + '0';
+            char * sendingid = &sendid;
+            char* argv[] = {"./process.out", sendingid,0};
+            execve(argv[0], &argv[0], NULL);
+        }
+    }*/
+
+
+    //*********************************************
+
 }
